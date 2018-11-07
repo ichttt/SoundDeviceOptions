@@ -21,6 +21,9 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+plugins {
+    id 'net.minecrell.licenser' version '0.4.1'
+}
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
@@ -33,6 +36,11 @@ def archiveGroup = "ichttt"
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
+}
+
+license {
+    include '**/ichttt/mods/**/*.java'
+    header = file('LICENSE_HEADER')
 }
 
 minecraft {
