@@ -37,7 +37,7 @@ public class GuiSound extends GuiScreenOptionsSounds {
         super.initGui();
 //        SoundDevices.reloadDeviceList();
         this.buttonList.remove(this.buttonList.size() - 1);
-        this.buttonList.add(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 156, mc.fontRenderer.trimStringToWidth("Output: " + MSCConfig.friendlyActiveSoundDevice(), 200)));
+        this.buttonList.add(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 156, mc.fontRenderer.trimStringToWidth(I18n.format("msc.output", MSCConfig.friendlyActiveSoundDevice()), 200)));
         this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 180, I18n.format("gui.done")));
     }
 

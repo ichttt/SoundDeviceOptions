@@ -18,6 +18,7 @@
 
 package ichttt.mods.moresoundconfig;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.Config;
 
 import javax.annotation.Nonnull;
@@ -45,7 +46,7 @@ public class MSCConfig {
     public static String friendlyActiveSoundDevice() {
         String device = getActiveSoundDevice();
         if (device == null)
-            return "Default";
+            return I18n.format("msc.default");
         return device;
     }
 }

@@ -27,7 +27,9 @@ import org.lwjgl.openal.AL;
 public class ASMHooks {
 
     public static void setupSound() throws LWJGLException {
+        //Dummy create to link natives
         AL.create(null, 44100, 60, false, false);
+        //AL query devices
         SoundDevices.reloadDeviceList();
         String device = MSCConfig.getActiveSoundDevice();
         boolean valid = SoundDevices.validateActiveOutput(device);
@@ -37,6 +39,7 @@ public class ASMHooks {
             SoundDevices.updateOutput(null);
         }
         MoreSoundConfig.LOGGER.info("SoundManager loading on device " + MSCConfig.friendlyActiveSoundDevice());
+        //AL shutdown and startup with actual parameters
         AL.destroy();
         AL.create(device, MSCConfig.contextFrequency, MSCConfig.contextRefresh, false);
     }
