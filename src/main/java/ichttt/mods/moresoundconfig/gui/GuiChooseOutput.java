@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.io.IOException;
@@ -31,12 +32,13 @@ import java.util.List;
 
 public class GuiChooseOutput extends GuiScreen {
     private final GuiScreen parent;
+    private final String initalDevice;
     private DeviceList list;
     private int startIndex;
 
     public GuiChooseOutput(GuiScreen parent) {
         this.parent = parent;
-        SoundDevices.reloadDeviceList();
+        this.initalDevice = MSCConfig.friendlyActiveSoundDevice();
     }
 
     @Override
@@ -51,6 +53,8 @@ public class GuiChooseOutput extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
+        this.drawCenteredString(mc.fontRenderer, I18n.format("msc.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        this.drawCenteredString(mc.fontRenderer, I18n.format("msc.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -79,11 +83,11 @@ public class GuiChooseOutput extends GuiScreen {
 
         public DeviceList(List<String> devices, String current) {
             super(GuiChooseOutput.this.mc,
-                    GuiChooseOutput.this.width-20,
+                    GuiChooseOutput.this.width-10,
                     GuiChooseOutput.this.height - 30,
                     30, GuiChooseOutput.this.height-50,
-                    10,
-                    devices.size() * 2,
+                    5,
+                    12,
                     GuiChooseOutput.this.width,
                     GuiChooseOutput.this.height);
             this.devices = devices;
@@ -116,7 +120,7 @@ public class GuiChooseOutput extends GuiScreen {
         @Override
         protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
             String device = devices.get(slotIdx);
-            mc.fontRenderer.drawString(device, left, slotTop, 0xFFFFFF);
+            mc.fontRenderer.drawString(device, left + 1, slotTop, 0xFFFFFF);
         }
 
         @Override

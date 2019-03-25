@@ -19,7 +19,9 @@
 package ichttt.mods.moresoundconfig.gui;
 
 import ichttt.mods.moresoundconfig.MSCConfig;
+import ichttt.mods.moresoundconfig.SoundDevices;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenOptionsSounds;
 import net.minecraft.client.resources.I18n;
@@ -44,7 +46,12 @@ public class GuiSound extends GuiScreenOptionsSounds {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         if (button.id == 300) {
-            mc.displayGuiScreen(new GuiChooseOutput(this));
+            SoundDevices.reloadDeviceList();
+            if (SoundDevices.validDevices.isEmpty()) {
+                mc.displayGuiScreen(new GuiErrorScreen("Failed to read sound devices", "Your audio driver might not support this feature."));
+            } else {
+                mc.displayGuiScreen(new GuiChooseOutput(this));
+            }
         } else {
             super.actionPerformed(button);
         }

@@ -33,7 +33,21 @@ public class SoundDevices {
     public static List<String> validDevices = new ArrayList<>();
 
     public static void reloadDeviceList() {
+        boolean success = false;
+        try {
+            success = !reloadDeviceList0();
+        } catch (UnsatisfiedLinkError e) {
+            MoreSoundConfig.LOGGER.error("Failed to reload device list! Native lib not hooked!", e);
+        } catch (RuntimeException e) {
+            MoreSoundConfig.LOGGER.error("Failed to reload device list! Unexpected error!", e);
+        }
+        if (!success)
+            validDevices.clear();
+    }
+
+    public static boolean reloadDeviceList0() {
         validDevices.clear();
+        boolean errorOccurred = false;
         if (ALC10.alcIsExtensionPresent(null, "ALC_enumerate_all_EXT")) {
             MoreSoundConfig.LOGGER.info("Reading sound devices");
             String s = ALC10.alcGetString(null, ALC11.ALC_ALL_DEVICES_SPECIFIER);
@@ -56,6 +70,7 @@ public class SoundDevices {
                         error = "Could not close";
                 }
                 if (error != null) {
+                    errorOccurred = true;
                     MoreSoundConfig.LOGGER.error("Error testing device " + deviceName);
                     MoreSoundConfig.LOGGER.error("Error code: " + error);
                 } else {
@@ -65,7 +80,9 @@ public class SoundDevices {
             }
         } else {
             MoreSoundConfig.LOGGER.warn("Could not list devices - operation not supported by sound driver!");
+            return true;
         }
+        return errorOccurred;
     }
 
     public static boolean validateActiveOutput(String output) {
