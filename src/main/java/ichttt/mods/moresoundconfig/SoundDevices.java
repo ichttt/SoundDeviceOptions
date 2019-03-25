@@ -30,19 +30,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundDevices {
-    public static List<String> validDevices = new ArrayList<>();
+    public static final List<String> validDevices = new ArrayList<>();
 
     public static void reloadDeviceList() {
-        boolean success = false;
-        try {
-            success = !reloadDeviceList0();
-        } catch (UnsatisfiedLinkError e) {
-            MoreSoundConfig.LOGGER.error("Failed to reload device list! Native lib not hooked!", e);
-        } catch (RuntimeException e) {
-            MoreSoundConfig.LOGGER.error("Failed to reload device list! Unexpected error!", e);
+        synchronized (validDevices) {
+            boolean success = false;
+            try {
+                success = !reloadDeviceList0();
+            } catch (UnsatisfiedLinkError e) {
+                MoreSoundConfig.LOGGER.error("Failed to reload device list! Native lib not hooked!", e);
+            } catch (RuntimeException e) {
+                MoreSoundConfig.LOGGER.error("Failed to reload device list! Unexpected error!", e);
+            }
+            if (!success)
+                validDevices.clear();
         }
-        if (!success)
-            validDevices.clear();
     }
 
     public static boolean reloadDeviceList0() {
