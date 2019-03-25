@@ -40,7 +40,7 @@ import org.apache.logging.log4j.Logger;
 public class MoreSoundConfig {
     public static final String MODID = "moresoundconfig";
     public static final String NAME = "More Sound Config";
-    public static final String VERSION = "1.0.1";
+    public static final String VERSION = "1.0.2";
     public static final String FINGERPRINT = "7904c4e13947c8a616c5f39b26bdeba796500722";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
