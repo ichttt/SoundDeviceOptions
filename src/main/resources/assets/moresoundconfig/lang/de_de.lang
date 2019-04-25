@@ -1,4 +1,0 @@
-msc.default=Standard
-msc.output=Ausgang: %s
-msc.newdevice=Wähle ein neues Ausgabegerät
-msc.activedevice=Gerade aktiv: %s

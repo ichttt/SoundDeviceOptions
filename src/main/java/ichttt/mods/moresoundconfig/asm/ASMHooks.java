@@ -19,28 +19,28 @@
 package ichttt.mods.moresoundconfig.asm;
 
 import ichttt.mods.moresoundconfig.MSCConfig;
-import ichttt.mods.moresoundconfig.MoreSoundConfig;
+import ichttt.mods.moresoundconfig.SoundDeviceOptions;
 import ichttt.mods.moresoundconfig.SoundDevices;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.openal.AL;
+import net.minecraft.client.audio.LibraryLWJGL3;
+import org.lwjgl.openal.ALC10;
 
 public class ASMHooks {
 
-    public static void setupSound() throws LWJGLException {
+    public static long setupSound() throws LibraryLWJGL3.LWJGL3SoundSystemException {
         //Dummy create to link natives
-        AL.create(null, 44100, 60, false, false);
+//        AL.create(null, 44100, 60, false, false);
         //AL query devices
         SoundDevices.reloadDeviceList();
         String device = MSCConfig.getActiveSoundDevice();
         boolean valid = SoundDevices.validateActiveOutput(device);
         if (!valid) {
-            MoreSoundConfig.LOGGER.warn("Sound device " + MSCConfig.activeSoundDevice + " no longer valid");
+            SoundDeviceOptions.LOGGER.warn("Sound device " + MSCConfig.activeSoundDevice + " no longer valid");
             device = null;
             SoundDevices.updateOutput(null);
         }
-        MoreSoundConfig.LOGGER.info("SoundManager loading on device " + MSCConfig.friendlyActiveSoundDevice());
+        SoundDeviceOptions.LOGGER.info("SoundManager loading on device " + MSCConfig.friendlyActiveSoundDevice());
         //AL shutdown and startup with actual parameters
-        AL.destroy();
-        AL.create(device, MSCConfig.contextFrequency, MSCConfig.contextRefresh, false);
+//        AL.destroy();
+        return ALC10.alcOpenDevice(device);
     }
 }

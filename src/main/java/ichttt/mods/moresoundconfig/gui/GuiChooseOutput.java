@@ -21,13 +21,11 @@ package ichttt.mods.moresoundconfig.gui;
 import ichttt.mods.moresoundconfig.MSCConfig;
 import ichttt.mods.moresoundconfig.SoundDevices;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GuiChooseOutput extends GuiScreen {
@@ -44,25 +42,25 @@ public class GuiChooseOutput extends GuiScreen {
     @Override
     public void initGui() {
         this.list = new DeviceList(SoundDevices.validDevices, MSCConfig.getActiveSoundDevice());
+        this.list.setSlotXBoundsFromLeft(5);
+        this.children.add(this.list);
         this.startIndex = this.list.selectedIndex;
-        this.buttonList.add(new GuiButton(1, width / 2 - 100, height / 6 + 168, I18n.format("gui.done")));
+        addButton(new GuiButton(1, width / 2 - 100, height / 6 + 168, I18n.format("gui.done")) {
+            @Override
+            public void onClick(double mouseX, double mouseY) {
+                GuiChooseOutput.this.mc.displayGuiScreen(GuiChooseOutput.this.parent);
+            }
+        });
         super.initGui();
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(mc.fontRenderer, I18n.format("msc.newdevice"), this.width / 2, 6, 0xFFFFFF);
         this.drawCenteredString(mc.fontRenderer, I18n.format("msc.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == 1) {
-            this.mc.displayGuiScreen(this.parent);
-        }
+        super.render(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -73,11 +71,11 @@ public class GuiChooseOutput extends GuiScreen {
             if (SoundDevices.validateActiveOutput(newValue)) {
                 SoundDevices.updateOutput(newValue);
             }
-            mc.getSoundHandler().sndManager.reloadSoundSystem();
+            mc.getSoundHandler().sndManager.reload();
         }
     }
 
-    private class DeviceList extends GuiScrollingList {
+    private class DeviceList extends GuiListExtended<DeviceList.Entry> {
         private final List<String> devices;
         int selectedIndex;
 
@@ -86,26 +84,20 @@ public class GuiChooseOutput extends GuiScreen {
                     GuiChooseOutput.this.width-10,
                     GuiChooseOutput.this.height - 30,
                     30, GuiChooseOutput.this.height-50,
-                    5,
-                    12,
-                    GuiChooseOutput.this.width,
-                    GuiChooseOutput.this.height);
+                    12);
+            for (String s : devices)
+                this.addEntry(new Entry(s));
             this.devices = devices;
             this.selectedIndex = current == null ? 0 : devices.indexOf(current);
         }
 
-        @Override
-        protected int getSize() {
-            return this.devices.size();
-        }
-
-        @Override
-        protected void elementClicked(int index, boolean doubleClick) {
-            this.selectedIndex = index;
-            if (doubleClick) {
-                GuiChooseOutput.this.mc.displayGuiScreen(GuiChooseOutput.this.parent);
-            }
-        }
+//        @Override
+//        protected void elementClicked(int index, boolean doubleClick) {
+//            this.selectedIndex = index;
+//            if (doubleClick) {
+//                GuiChooseOutput.this.mc.displayGuiScreen(GuiChooseOutput.this.parent);
+//            }
+//        }
 
         @Override
         protected boolean isSelected(int index) {
@@ -113,14 +105,19 @@ public class GuiChooseOutput extends GuiScreen {
         }
 
         @Override
-        protected void drawBackground() {
-            drawDefaultBackground();
+        protected int getScrollBarX() {
+            return this.width;
+        }
+
+
+        @Override
+        public int getListWidth() {
+            return width;
         }
 
         @Override
-        protected void drawSlot(int slotIdx, int entryRight, int slotTop, int slotBuffer, Tessellator tess) {
-            String device = devices.get(slotIdx);
-            mc.fontRenderer.drawString(device, left + 1, slotTop, 0xFFFFFF);
+        protected boolean mouseClicked(int index, int button, double mouseX, double mouseY) {
+            return super.mouseClicked(index, button, mouseX, mouseY);
         }
 
         @Override
@@ -128,6 +125,27 @@ public class GuiChooseOutput extends GuiScreen {
             return this.getSize() * 10;
         }
 
+        private class Entry extends GuiListExtended.IGuiListEntry<Entry> {
+            private final String device;
 
+            public Entry(String device) {
+                if (device.startsWith("OpenAL Soft on "))
+                    device = device.substring("OpenAL Soft on ".length());
+                this.device = device;
+            }
+
+            @Override
+            public void drawEntry(int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
+                GuiChooseOutput.this.mc.fontRenderer.drawString(device, this.getX() + 1, this.getY(), 0xFFFFFF);
+            }
+
+            @Override
+            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+                DeviceList.this.selectedIndex = index;
+                return true;
+            }
+
+
+        }
     }
 }

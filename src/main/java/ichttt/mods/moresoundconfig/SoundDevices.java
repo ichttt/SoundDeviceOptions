@@ -19,12 +19,9 @@
 package ichttt.mods.moresoundconfig;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
-import org.lwjgl.openal.ALCdevice;
+import org.lwjgl.openal.ALUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,55 +33,49 @@ public class SoundDevices {
         synchronized (validDevices) {
             boolean success = false;
             try {
-                success = !reloadDeviceList0();
+                reloadDeviceList0();
+                success = true;
             } catch (UnsatisfiedLinkError e) {
-                MoreSoundConfig.LOGGER.error("Failed to reload device list! Native lib not hooked!", e);
+                SoundDeviceOptions.LOGGER.error("Failed to reload device list! Native lib not hooked!", e);
             } catch (RuntimeException e) {
-                MoreSoundConfig.LOGGER.error("Failed to reload device list! Unexpected error!", e);
+                SoundDeviceOptions.LOGGER.error("Failed to reload device list! Unexpected error!", e);
             }
             if (!success)
                 validDevices.clear();
         }
     }
 
-    public static boolean reloadDeviceList0() {
+    public static void reloadDeviceList0() {
         validDevices.clear();
-        boolean errorOccurred = false;
-        if (ALC10.alcIsExtensionPresent(null, "ALC_enumerate_all_EXT")) {
-            MoreSoundConfig.LOGGER.info("Reading sound devices");
-            String s = ALC10.alcGetString(null, ALC11.ALC_ALL_DEVICES_SPECIFIER);
-            String[] devices = s.split("\u0000");
+        if (ALC10.alcIsExtensionPresent(0, "ALC_enumerate_all_EXT")) {
+            SoundDeviceOptions.LOGGER.info("Reading sound devices");
+            List<String> devices = ALUtil.getStringList(0, ALC11.ALC_ALL_DEVICES_SPECIFIER);
             for (String deviceName : devices) {
                 String error = null;
-                ALCdevice device = ALC10.alcOpenDevice(deviceName);
-                if (device == null) {
+                long device = ALC10.alcOpenDevice(deviceName);
+                System.out.println(ALC10.alcGetString(device, ALC11.ALC_ALL_DEVICES_SPECIFIER));
+                if (device == 0)
                     error = "null device";
-                } else if (!device.isValid()) {
-                    error = "invalid device";
-                }
                 int code = ALC10.alcGetError(device);
                 if (code != ALC10.ALC_NO_ERROR)
                     error = code + "";
 
-                if (device != null) {
+                if (device != 0) {
                     boolean success = ALC10.alcCloseDevice(device);
                     if (!success)
                         error = "Could not close";
                 }
                 if (error != null) {
-                    errorOccurred = true;
-                    MoreSoundConfig.LOGGER.error("Error testing device " + deviceName);
-                    MoreSoundConfig.LOGGER.error("Error code: " + error);
+                    SoundDeviceOptions.LOGGER.error("Error testing device " + deviceName);
+                    SoundDeviceOptions.LOGGER.error("Error code: " + error);
                 } else {
-                    MoreSoundConfig.LOGGER.debug("Found valid device " + deviceName);
+                    SoundDeviceOptions.LOGGER.debug("Found valid device " + deviceName);
                     validDevices.add(deviceName);
                 }
             }
         } else {
-            MoreSoundConfig.LOGGER.warn("Could not list devices - operation not supported by sound driver!");
-            return true;
+            SoundDeviceOptions.LOGGER.warn("Could not list devices - operation not supported by sound driver!");
         }
-        return errorOccurred;
     }
 
     public static boolean validateActiveOutput(String output) {
@@ -95,6 +86,5 @@ public class SoundDevices {
         if (newValue == null)
             newValue = "";
         MSCConfig.activeSoundDevice = newValue;
-        Minecraft.getMinecraft().addScheduledTask(() -> ConfigManager.sync(MoreSoundConfig.MODID, Config.Type.INSTANCE));
     }
 }

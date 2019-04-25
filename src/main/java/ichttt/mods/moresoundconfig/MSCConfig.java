@@ -19,19 +19,13 @@
 package ichttt.mods.moresoundconfig;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.common.config.Config;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@Config(modid = MoreSoundConfig.MODID)
 public class MSCConfig {
 
     public static String activeSoundDevice = "";
-
-    public static int contextFrequency = 44100;
-
-    public static int contextRefresh = 60;
 
     @Nullable
     public static String getActiveSoundDevice() {

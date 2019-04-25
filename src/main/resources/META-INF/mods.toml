@@ -1,0 +1,24 @@
+# Sound Device Options mod definition file
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/ichttt/moresoundconfig/issues"
+displayURL="https://minecraft.curseforge.com/projects/more-sound-config"
+# logoFile="firstaid_logo.png"
+authors="ichttt"
+[[mods]]
+    modId="sounddeviceoptions"
+    version="${file.jarVersion}"
+    displayName="Sound Device Options"
+    description="Sound Device Options allows you to change the sound device while the game is running"
+[[dependencies.sounddeviceoptions]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25.0.149,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.sounddeviceoptions]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2,1.14)"
+    ordering="NONE"
+    side="BOTH"
