@@ -21,15 +21,14 @@ package ichttt.mods.moresoundconfig.asm;
 import ichttt.mods.moresoundconfig.MSCConfig;
 import ichttt.mods.moresoundconfig.SoundDeviceOptions;
 import ichttt.mods.moresoundconfig.SoundDevices;
-import net.minecraft.client.audio.LibraryLWJGL3;
 import org.lwjgl.openal.ALC10;
+
+import java.nio.ByteBuffer;
 
 public class ASMHooks {
 
-    public static long setupSound() throws LibraryLWJGL3.LWJGL3SoundSystemException {
-        //Dummy create to link natives
-//        AL.create(null, 44100, 60, false, false);
-        //AL query devices
+    //Accept a ByteBuffer as an arg, so the signature matches
+    public static long setupSound(ByteBuffer deviceSpecifier) {
         SoundDevices.reloadDeviceList();
         String device = MSCConfig.getActiveSoundDevice();
         boolean valid = SoundDevices.validateActiveOutput(device);
@@ -39,8 +38,6 @@ public class ASMHooks {
             SoundDevices.updateOutput(null);
         }
         SoundDeviceOptions.LOGGER.info("SoundManager loading on device " + MSCConfig.friendlyActiveSoundDevice());
-        //AL shutdown and startup with actual parameters
-//        AL.destroy();
         return ALC10.alcOpenDevice(device);
     }
 }
