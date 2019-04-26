@@ -1,7 +1,7 @@
 # Sound Device Options mod definition file
 modLoader="javafml"
 loaderVersion="[25,)"
-issueTrackerURL="https://github.com/ichttt/moresoundconfig/issues"
+issueTrackerURL="https://github.com/ichttt/sounddeviceoptions/issues"
 displayURL="https://minecraft.curseforge.com/projects/more-sound-config"
 # logoFile="firstaid_logo.png"
 authors="ichttt"

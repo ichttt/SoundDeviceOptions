@@ -25,7 +25,7 @@ function initializeCoreMod() {
                     for (var i = 0; i < arrayLength; ++i) {
                         var instruction = method.instructions.get(i);
                         if (instruction.getOpcode() === Opcodes.INVOKESTATIC && instruction.owner === "org/lwjgl/openal/ALC10" && instruction.name === "alcOpenDevice") {
-                            method.instructions.insertBefore(instruction, ASMAPI.buildMethodCall("ichttt/mods/moresoundconfig/asm/ASMHooks", "setupSound", "(Ljava/nio/ByteBuffer;)J", ASMAPI.MethodType.STATIC))
+                            method.instructions.insertBefore(instruction, ASMAPI.buildMethodCall("ichttt/mods/sounddeviceoptions/client/ASMHooks", "setupSound", "(Ljava/nio/ByteBuffer;)J", ASMAPI.MethodType.STATIC))
                             method.instructions.remove(instruction);
                             print("Patched!");
                             break;

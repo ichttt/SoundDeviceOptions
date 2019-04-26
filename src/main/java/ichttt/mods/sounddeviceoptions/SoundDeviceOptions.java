@@ -1,6 +1,6 @@
 /*
- * MoreSoundConfig
- * Copyright (C) 2018
+ * SoundDeviceOptions
+ * Copyright (C) 2018-2019
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ichttt.mods.moresoundconfig;
+package ichttt.mods.sounddeviceoptions;
 
+import ichttt.mods.sounddeviceoptions.client.ClientHooks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;

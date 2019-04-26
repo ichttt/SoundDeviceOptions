@@ -1,6 +1,6 @@
 /*
- * MoreSoundConfig
- * Copyright (C) 2018
+ * SoundDeviceOptions
+ * Copyright (C) 2018-2019
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ichttt.mods.moresoundconfig;
+package ichttt.mods.sounddeviceoptions;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -36,7 +36,7 @@ public class SDOConfig {
         CLIENT = specPair.getLeft();
     }
 
-    SDOConfig(ForgeConfigSpec.Builder builder) {
+    private SDOConfig(ForgeConfigSpec.Builder builder) {
         this.activeSoundDevice = builder.comment("The active sound device").define("activeSoundDevice", "");
     }
 

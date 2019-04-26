@@ -1,6 +1,6 @@
 /*
- * MoreSoundConfig
- * Copyright (C) 2018
+ * SoundDeviceOptions
+ * Copyright (C) 2018-2019
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ichttt.mods.moresoundconfig;
+package ichttt.mods.sounddeviceoptions.client;
 
 import com.electronwill.nightconfig.core.Config;
+import ichttt.mods.sounddeviceoptions.SDOConfig;
+import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.openal.ALC10;
@@ -47,7 +49,7 @@ public class SoundDevices {
         }
     }
 
-    public static void reloadDeviceList0() {
+    private static void reloadDeviceList0() {
         validDevices.clear();
         if (ALC10.alcIsExtensionPresent(0, "ALC_enumerate_all_EXT")) {
             SoundDeviceOptions.LOGGER.info("Reading sound devices");

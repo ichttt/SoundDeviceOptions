@@ -1,6 +1,6 @@
 /*
- * MoreSoundConfig
- * Copyright (C) 2018
+ * SoundDeviceOptions
+ * Copyright (C) 2018-2019
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ichttt.mods.moresoundconfig.asm;
+package ichttt.mods.sounddeviceoptions.client;
 
-import ichttt.mods.moresoundconfig.SDOConfig;
-import ichttt.mods.moresoundconfig.SoundDeviceOptions;
-import ichttt.mods.moresoundconfig.SoundDevices;
+import ichttt.mods.sounddeviceoptions.SDOConfig;
+import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
 import org.lwjgl.openal.ALC10;
 
 import java.nio.ByteBuffer;

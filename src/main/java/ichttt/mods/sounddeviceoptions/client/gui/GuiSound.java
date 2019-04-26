@@ -1,6 +1,6 @@
 /*
- * MoreSoundConfig
- * Copyright (C) 2018
+ * SoundDeviceOptions
+ * Copyright (C) 2018-2019
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ichttt.mods.moresoundconfig.gui;
+package ichttt.mods.sounddeviceoptions.client.gui;
 
-import ichttt.mods.moresoundconfig.SDOConfig;
-import ichttt.mods.moresoundconfig.SoundDevices;
+import ichttt.mods.sounddeviceoptions.SDOConfig;
+import ichttt.mods.sounddeviceoptions.client.SoundDevices;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiErrorScreen;

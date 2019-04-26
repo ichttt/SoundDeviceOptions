@@ -8,6 +8,9 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+plugins {
+    id 'net.minecrell.licenser' version '0.4.1'
+}
 apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
@@ -76,6 +79,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+license {
+    include '**/ichttt/mods/**/*.java'
+    header = file('LICENSE_HEADER')
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
