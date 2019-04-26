@@ -18,7 +18,7 @@
 
 package ichttt.mods.moresoundconfig.asm;
 
-import ichttt.mods.moresoundconfig.MSCConfig;
+import ichttt.mods.moresoundconfig.SDOConfig;
 import ichttt.mods.moresoundconfig.SoundDeviceOptions;
 import ichttt.mods.moresoundconfig.SoundDevices;
 import org.lwjgl.openal.ALC10;
@@ -30,14 +30,14 @@ public class ASMHooks {
     //Accept a ByteBuffer as an arg, so the signature matches
     public static long setupSound(ByteBuffer deviceSpecifier) {
         SoundDevices.reloadDeviceList();
-        String device = MSCConfig.getActiveSoundDevice();
+        String device = SDOConfig.getActiveSoundDevice();
         boolean valid = SoundDevices.validateActiveOutput(device);
         if (!valid) {
-            SoundDeviceOptions.LOGGER.warn("Sound device " + MSCConfig.activeSoundDevice + " no longer valid");
+            SoundDeviceOptions.LOGGER.warn("Sound device " + SDOConfig.CLIENT.activeSoundDevice.get() + " no longer valid");
             device = null;
             SoundDevices.updateOutput(null);
         }
-        SoundDeviceOptions.LOGGER.info("SoundManager loading on device " + MSCConfig.friendlyActiveSoundDevice());
+        SoundDeviceOptions.LOGGER.info("SoundManager loading on device {}", SDOConfig.getActiveSoundDevice());
         return ALC10.alcOpenDevice(device);
     }
 }

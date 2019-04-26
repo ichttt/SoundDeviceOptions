@@ -18,7 +18,7 @@
 
 package ichttt.mods.moresoundconfig.gui;
 
-import ichttt.mods.moresoundconfig.MSCConfig;
+import ichttt.mods.moresoundconfig.SDOConfig;
 import ichttt.mods.moresoundconfig.SoundDevices;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
@@ -36,12 +36,12 @@ public class GuiChooseOutput extends GuiScreen {
 
     public GuiChooseOutput(GuiScreen parent) {
         this.parent = parent;
-        this.initalDevice = MSCConfig.friendlyActiveSoundDevice();
+        this.initalDevice = SDOConfig.friendlyActiveSoundDevice();
     }
 
     @Override
     public void initGui() {
-        this.list = new DeviceList(SoundDevices.validDevices, MSCConfig.getActiveSoundDevice());
+        this.list = new DeviceList(SoundDevices.validDevices, SDOConfig.getActiveSoundDevice());
         this.list.setSlotXBoundsFromLeft(5);
         this.children.add(this.list);
         this.startIndex = this.list.selectedIndex;
@@ -58,8 +58,8 @@ public class GuiChooseOutput extends GuiScreen {
     public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(mc.fontRenderer, I18n.format("msc.newdevice"), this.width / 2, 6, 0xFFFFFF);
-        this.drawCenteredString(mc.fontRenderer, I18n.format("msc.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
+        this.drawCenteredString(mc.fontRenderer, I18n.format("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        this.drawCenteredString(mc.fontRenderer, I18n.format("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.render(mouseX, mouseY, partialTicks);
     }
 
@@ -91,14 +91,6 @@ public class GuiChooseOutput extends GuiScreen {
             this.selectedIndex = current == null ? 0 : devices.indexOf(current);
         }
 
-//        @Override
-//        protected void elementClicked(int index, boolean doubleClick) {
-//            this.selectedIndex = index;
-//            if (doubleClick) {
-//                GuiChooseOutput.this.mc.displayGuiScreen(GuiChooseOutput.this.parent);
-//            }
-//        }
-
         @Override
         protected boolean isSelected(int index) {
             return this.selectedIndex == index;
@@ -129,9 +121,7 @@ public class GuiChooseOutput extends GuiScreen {
             private final String device;
 
             public Entry(String device) {
-                if (device.startsWith("OpenAL Soft on "))
-                    device = device.substring("OpenAL Soft on ".length());
-                this.device = device;
+                this.device = SDOConfig.formatDevice(device);
             }
 
             @Override

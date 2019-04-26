@@ -18,7 +18,7 @@
 
 package ichttt.mods.moresoundconfig.gui;
 
-import ichttt.mods.moresoundconfig.MSCConfig;
+import ichttt.mods.moresoundconfig.SDOConfig;
 import ichttt.mods.moresoundconfig.SoundDevices;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.gui.GuiButton;
@@ -42,7 +42,7 @@ public class GuiSound extends GuiScreenOptionsSounds {
         if (fromBList != fromCList) {
             throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " id " + fromBList.id + " from children list= " + fromCList);
         }
-        addButton(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 156, mc.fontRenderer.trimStringToWidth(I18n.format("msc.output", MSCConfig.friendlyActiveSoundDevice()), 200)) {
+        addButton(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 156, mc.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200)) {
             @Override
             public void onClick(double mouseX, double mouseY) {
                 SoundDevices.reloadDeviceList();

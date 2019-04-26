@@ -20,7 +20,9 @@ package ichttt.mods.moresoundconfig;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,6 +36,7 @@ public class SoundDeviceOptions {
 
     public SoundDeviceOptions() {
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientHooks.register());
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.info("Running on dedicated server - Not doing anything"));
+        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.debug("Running on dedicated server - Not doing anything"));
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, SDOConfig.clientSpec);
     }
 }

@@ -19,28 +19,49 @@
 package ichttt.mods.moresoundconfig;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MSCConfig {
+public class SDOConfig {
 
-    public static String activeSoundDevice = "";
+    public static final ForgeConfigSpec clientSpec;
+    public static final SDOConfig CLIENT;
+
+    static {
+        final Pair<SDOConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(SDOConfig::new);
+        clientSpec = specPair.getRight();
+        CLIENT = specPair.getLeft();
+    }
+
+    SDOConfig(ForgeConfigSpec.Builder builder) {
+        this.activeSoundDevice = builder.comment("The active sound device").define("activeSoundDevice", "");
+    }
+
+    public final ForgeConfigSpec.ConfigValue<String> activeSoundDevice;
 
     @Nullable
     public static String getActiveSoundDevice() {
-        if (activeSoundDevice == null)
+        String device = CLIENT.activeSoundDevice.get();
+        if (device == null)
             return null;
-        if (activeSoundDevice.isEmpty())
+        if (device.isEmpty())
             return null;
-        return activeSoundDevice;
+        return device;
     }
 
     @Nonnull
     public static String friendlyActiveSoundDevice() {
-        String device = getActiveSoundDevice();
+        return formatDevice(getActiveSoundDevice());
+    }
+
+    public static String formatDevice(String device) {
         if (device == null)
-            return I18n.format("msc.default");
+            return I18n.format("sounddeviceoptions.default");
+        else if (device.startsWith("OpenAL Soft on "))
+            return device.substring("OpenAL Soft on ".length());
         return device;
     }
 }

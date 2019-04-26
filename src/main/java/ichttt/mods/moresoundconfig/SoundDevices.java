@@ -18,7 +18,9 @@
 
 package ichttt.mods.moresoundconfig;
 
-import net.minecraft.client.Minecraft;
+import com.electronwill.nightconfig.core.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALUtil;
@@ -53,7 +55,6 @@ public class SoundDevices {
             for (String deviceName : devices) {
                 String error = null;
                 long device = ALC10.alcOpenDevice(deviceName);
-                System.out.println(ALC10.alcGetString(device, ALC11.ALC_ALL_DEVICES_SPECIFIER));
                 if (device == 0)
                     error = "null device";
                 int code = ALC10.alcGetError(device);
@@ -85,6 +86,7 @@ public class SoundDevices {
     public static void updateOutput(String newValue) {
         if (newValue == null)
             newValue = "";
-        MSCConfig.activeSoundDevice = newValue;
+        Config config = ObfuscationReflectionHelper.getPrivateValue(ForgeConfigSpec.class, SDOConfig.clientSpec, "childConfig");
+        config.set(SDOConfig.CLIENT.activeSoundDevice.getPath(), newValue);
     }
 }
