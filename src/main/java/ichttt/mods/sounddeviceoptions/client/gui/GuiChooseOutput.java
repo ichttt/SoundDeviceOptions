@@ -67,7 +67,7 @@ public class GuiChooseOutput extends GuiScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
         if (this.list.selectedIndex != startIndex) {
-            String newValue = this.list.devices.get(this.list.selectedIndex);
+            String newValue = this.list.selectedIndex == 0 ? null : this.list.devices.get(this.list.selectedIndex - 1);
             if (SoundDevices.validateActiveOutput(newValue)) {
                 SoundDevices.updateOutput(newValue);
             }
@@ -85,10 +85,11 @@ public class GuiChooseOutput extends GuiScreen {
                     GuiChooseOutput.this.height - 30,
                     30, GuiChooseOutput.this.height-50,
                     12);
+            this.addEntry(new Entry("<" + I18n.format("sounddeviceoptions.default") + ">"));
             for (String s : devices)
                 this.addEntry(new Entry(s));
             this.devices = devices;
-            this.selectedIndex = current == null ? 0 : devices.indexOf(current);
+            this.selectedIndex = current == null ? 0 : (devices.indexOf(current) + 1);
         }
 
         @Override

@@ -1,5 +1,5 @@
 {
-  "sounddeviceoptions.default": "Standard",
+  "sounddeviceoptions.default": "System Standard",
   "sounddeviceoptions.output": "Ausgang: %s",
   "sounddeviceoptions.newdevice": "Wähle ein neues Ausgabegerät",
   "sounddeviceoptions.activedevice": "Gerade aktiv: %s"
