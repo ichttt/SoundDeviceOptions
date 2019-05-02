@@ -19,6 +19,7 @@
 package ichttt.mods.moresoundconfig.gui;
 
 import ichttt.mods.moresoundconfig.MSCConfig;
+import ichttt.mods.moresoundconfig.MoreSoundConfig;
 import ichttt.mods.moresoundconfig.SoundDevices;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuiChooseOutput extends GuiScreen {
@@ -69,9 +71,11 @@ public class GuiChooseOutput extends GuiScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
         if (this.list.selectedIndex != startIndex) {
-            String newValue = this.list.devices.get(this.list.selectedIndex);
+            String newValue = this.list.selectedIndex == 0 ? null : this.list.devices.get(this.list.selectedIndex);
             if (SoundDevices.validateActiveOutput(newValue)) {
                 SoundDevices.updateOutput(newValue);
+            } else {
+                MoreSoundConfig.LOGGER.warn("Tried selecting invalid device " + newValue);
             }
             mc.getSoundHandler().sndManager.reloadSoundSystem();
         }
@@ -90,8 +94,10 @@ public class GuiChooseOutput extends GuiScreen {
                     12,
                     GuiChooseOutput.this.width,
                     GuiChooseOutput.this.height);
-            this.devices = devices;
-            this.selectedIndex = current == null ? 0 : devices.indexOf(current);
+            this.devices = new ArrayList<>();
+            this.devices.add("<" + I18n.format("msc.default") + ">");
+            this.devices.addAll(devices);
+            this.selectedIndex = current == null ? 0 : this.devices.indexOf(current);
         }
 
         @Override
