@@ -1,0 +1,6 @@
+{
+  "sounddeviceoptions.default": "系统默认",
+  "sounddeviceoptions.output": "输出: %s",
+  "sounddeviceoptions.newdevice": "选择新的输出设备",
+  "sounddeviceoptions.activedevice": "当前已激活: %s"
+}
