@@ -1,0 +1,4 @@
+msc.default=系统默认
+msc.output=输出: %s
+msc.newdevice=选择新的输出设备
+msc.activedevice=当前已激活: %s
