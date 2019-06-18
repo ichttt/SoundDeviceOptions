@@ -20,119 +20,105 @@ package ichttt.mods.sounddeviceoptions.client.gui;
 
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.client.SoundDevices;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 
-public class GuiChooseOutput extends GuiScreen {
-    private final GuiScreen parent;
+public class GuiChooseOutput extends Screen {
+    private final Screen parent;
     private final String initalDevice;
     private DeviceList list;
     private int startIndex;
 
-    public GuiChooseOutput(GuiScreen parent) {
+    public GuiChooseOutput(Screen parent) {
+        super(new TranslationTextComponent("sounddeviceoptions.chooseoutput"));
         this.parent = parent;
         this.initalDevice = SDOConfig.friendlyActiveSoundDevice();
     }
 
     @Override
-    public void initGui() {
+    public void init() {
         this.list = new DeviceList(SoundDevices.validDevices, SDOConfig.getActiveSoundDevice());
-        this.list.setSlotXBoundsFromLeft(5);
+        this.list.setLeftPos(5);
         this.children.add(this.list);
         this.startIndex = this.list.selectedIndex;
-        addButton(new GuiButton(1, width / 2 - 100, height / 6 + 168, I18n.format("gui.done")) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                GuiChooseOutput.this.mc.displayGuiScreen(GuiChooseOutput.this.parent);
-            }
-        });
-        super.initGui();
+        addButton(new Button(width / 2 - 100, height / 6 + 168, 200, 20, I18n.format("gui.done"), button -> GuiChooseOutput.this.minecraft.displayGuiScreen(GuiChooseOutput.this.parent)));
+        super.init();
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(mc.fontRenderer, I18n.format("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
-        this.drawCenteredString(mc.fontRenderer, I18n.format("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
+        this.renderDirtBackground(0);
+        this.list.render(mouseX, mouseY, partialTicks);
+        this.drawCenteredString(minecraft.fontRenderer, I18n.format("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        this.drawCenteredString(minecraft.fontRenderer, I18n.format("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.render(mouseX, mouseY, partialTicks);
     }
 
     @Override
-    public void onGuiClosed() {
-        super.onGuiClosed();
+    public void removed() {
         if (this.list.selectedIndex != startIndex) {
             String newValue = this.list.selectedIndex == 0 ? null : this.list.devices.get(this.list.selectedIndex - 1);
             if (SoundDevices.validateActiveOutput(newValue)) {
                 SoundDevices.updateOutput(newValue);
             }
-            mc.getSoundHandler().sndManager.reload();
+            minecraft.getSoundHandler().sndManager.reload();
         }
+        super.removed();
     }
 
-    private class DeviceList extends GuiListExtended<DeviceList.Entry> {
+    private class DeviceList extends ExtendedList<DeviceList.Entry> {
         private final List<String> devices;
         int selectedIndex;
 
         public DeviceList(List<String> devices, String current) {
-            super(GuiChooseOutput.this.mc,
+            super(GuiChooseOutput.this.minecraft,
                     GuiChooseOutput.this.width-10,
                     GuiChooseOutput.this.height - 30,
                     30, GuiChooseOutput.this.height-50,
                     12);
-            this.addEntry(new Entry("<" + I18n.format("sounddeviceoptions.default") + ">"));
-            for (String s : devices)
-                this.addEntry(new Entry(s));
+            int index = 0;
+            Entry defaultOption = new Entry("<" + I18n.format("sounddeviceoptions.default") + ">", index);
+            this.addEntry(defaultOption);
+            this.setSelected(defaultOption);
+            index++;
+            for (String s : devices) {
+                this.addEntry(new Entry(s, index));
+                index++;
+            }
             this.devices = devices;
             this.selectedIndex = current == null ? 0 : (devices.indexOf(current) + 1);
         }
 
         @Override
-        protected boolean isSelected(int index) {
-            return this.selectedIndex == index;
-        }
-
-        @Override
-        protected int getScrollBarX() {
-            return this.width;
-        }
-
-
-        @Override
-        public int getListWidth() {
+        public int getRowWidth() {
             return width;
         }
 
-        @Override
-        protected boolean mouseClicked(int index, int button, double mouseX, double mouseY) {
-            return super.mouseClicked(index, button, mouseX, mouseY);
-        }
-
-        @Override
-        protected int getContentHeight() {
-            return this.getSize() * 10;
-        }
-
-        private class Entry extends GuiListExtended.IGuiListEntry<Entry> {
+        private class Entry extends ExtendedList.AbstractListEntry<Entry> {
             private final String device;
+            private final int index;
 
-            public Entry(String device) {
+            public Entry(String device, int index) {
                 this.device = SDOConfig.formatDevice(device);
+                this.index = index;
             }
 
             @Override
-            public void drawEntry(int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
-                GuiChooseOutput.this.mc.fontRenderer.drawString(device, this.getX() + 1, this.getY(), 0xFFFFFF);
+            public void render(int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
+                GuiChooseOutput.this.minecraft.fontRenderer.drawString(device, left + 1, top, 0xFFFFFF);
             }
 
             @Override
-            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-                DeviceList.this.selectedIndex = index;
+            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_)
+            {
+                DeviceList.this.selectedIndex = this.index;
+                DeviceList.this.setSelected(this);
                 return true;
             }
 

@@ -20,14 +20,13 @@ package ichttt.mods.sounddeviceoptions.client;
 
 import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
 import ichttt.mods.sounddeviceoptions.client.gui.GuiSound;
-import net.minecraft.client.gui.GuiScreenOptionsSounds;
+import net.minecraft.client.gui.screen.OptionsSoundsScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class ClientHooks {
-
 
     public static void register() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHooks::setup);
@@ -39,8 +38,8 @@ public class ClientHooks {
     }
 
     private static void onGuiOpen(GuiOpenEvent event) {
-        if (event.getGui() instanceof GuiScreenOptionsSounds && !(event.getGui() instanceof GuiSound)) {
-            GuiScreenOptionsSounds sounds = (GuiScreenOptionsSounds) event.getGui();
+        if (event.getGui() instanceof OptionsSoundsScreen && !(event.getGui() instanceof GuiSound)) {
+            OptionsSoundsScreen sounds = (OptionsSoundsScreen) event.getGui();
             event.setGui(new GuiSound(sounds.parent, sounds.game_settings_4));
         }
     }

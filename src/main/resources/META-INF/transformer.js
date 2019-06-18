@@ -3,16 +3,18 @@ function initializeCoreMod() {
         'coreModName': {
             'target': {
                 'type': 'CLASS',
-                'name': 'net.minecraft.client.audio.LibraryLWJGL3'
+                'name': 'net.minecraft.client.audio.SoundSystem'
             },
             'transformer': function(classNode) {
                 var methods = classNode.methods;
+                var success = false;
 
                 for (var i in methods) {
                     var method = methods[i];
                     var methodName = method.name;
 
-                    var deobfNameEquals = "init".equals(methodName);
+                    var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
+                    var deobfNameEquals = ASMAPI.mapMethod("func_216406_f").equals(methodName);
 
                     if (!deobfNameEquals) {
                         continue;
@@ -20,7 +22,6 @@ function initializeCoreMod() {
                     print("Found method init()V, patching...");
 
                     var Opcodes = Java.type('org.objectweb.asm.Opcodes');
-                    var ASMAPI = Java.type('net.minecraftforge.coremod.api.ASMAPI');
                     var arrayLength = method.instructions.size();
                     for (var i = 0; i < arrayLength; ++i) {
                         var instruction = method.instructions.get(i);
@@ -28,10 +29,14 @@ function initializeCoreMod() {
                             method.instructions.insertBefore(instruction, ASMAPI.buildMethodCall("ichttt/mods/sounddeviceoptions/client/ASMHooks", "setupSound", "(Ljava/nio/ByteBuffer;)J", ASMAPI.MethodType.STATIC))
                             method.instructions.remove(instruction);
                             print("Patched!");
+                            success = true;
                             break;
                         }
                     }
                     break;
+                }
+                if (success === false) {
+                    throw "Failed to transform!"
                 }
 
                 return classNode;

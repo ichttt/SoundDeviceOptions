@@ -21,44 +21,40 @@ package ichttt.mods.sounddeviceoptions.client.gui;
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.client.SoundDevices;
 import net.minecraft.client.GameSettings;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiErrorScreen;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenOptionsSounds;
 import net.minecraft.client.gui.IGuiEventListener;
+import net.minecraft.client.gui.screen.ErrorScreen;
+import net.minecraft.client.gui.screen.OptionsSoundsScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.StringTextComponent;
 
-public class GuiSound extends GuiScreenOptionsSounds {
-    public GuiSound(GuiScreen parentIn, GameSettings settingsIn) {
+public class GuiSound extends OptionsSoundsScreen {
+    public GuiSound(Screen parentIn, GameSettings settingsIn) {
         super(parentIn, settingsIn);
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
+    public void init() {
+        super.init();
 //        SoundDevices.reloadDeviceList();
-        GuiButton fromBList = this.buttons.remove(this.buttons.size() - 1);
+        Widget fromBList = this.buttons.remove(this.buttons.size() - 1);
         IGuiEventListener fromCList = this.children.remove(this.children.size() - 1);
         if (fromBList != fromCList) {
-            throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " id " + fromBList.id + " from children list= " + fromCList);
+            throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " msg " + fromBList.getMessage() + " from children list= " + fromCList);
         }
-        addButton(new GuiButton(300, this.width / 2 - 100, this.height / 6 + 156, mc.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200)) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                SoundDevices.reloadDeviceList();
-                if (SoundDevices.validDevices.isEmpty()) {
-                    mc.displayGuiScreen(new GuiErrorScreen("Failed to read sound devices", "Your audio driver might not support this feature."));
-                } else {
-                    mc.displayGuiScreen(new GuiChooseOutput(GuiSound.this));
-                }
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, minecraft.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200), b -> {
+            SoundDevices.reloadDeviceList();
+            if (SoundDevices.validDevices.isEmpty()) {
+                minecraft.displayGuiScreen(new ErrorScreen(new StringTextComponent("Failed to read sound devices"), "Your audio driver might not support this feature."));
+            } else {
+                minecraft.displayGuiScreen(new GuiChooseOutput(GuiSound.this));
             }
-        });
-        addButton(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 180, I18n.format("gui.done")) {
-            @Override
-            public void onClick(double mouseX, double mouseY) {
-                GuiSound.this.mc.gameSettings.saveOptions(); //Same as GuiScreenOptionsSound this
-                GuiSound.this.mc.displayGuiScreen(GuiSound.this.parent);
-            }
-        });
+        }));
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, I18n.format("gui.done"), button -> {
+            GuiSound.this.minecraft.gameSettings.saveOptions(); //Same as GuiScreenOptionsSound this
+            GuiSound.this.minecraft.displayGuiScreen(GuiSound.this.parent);
+        }));
     }
 }
