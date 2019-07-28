@@ -88,7 +88,7 @@ public class SoundDevices {
     public static void updateOutput(String newValue) {
         if (newValue == null)
             newValue = "";
-        Config config = ObfuscationReflectionHelper.getPrivateValue(ForgeConfigSpec.class, SDOConfig.clientSpec, "childConfig");
-        config.set(SDOConfig.CLIENT.activeSoundDevice.getPath(), newValue);
+        SDOConfig.CLIENT.activeSoundDevice.set(newValue);
+        SDOConfig.CLIENT.activeSoundDevice.save();
     }
 }

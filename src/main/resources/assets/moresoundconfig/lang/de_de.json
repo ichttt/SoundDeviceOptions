@@ -2,5 +2,7 @@
   "sounddeviceoptions.default": "System Standard",
   "sounddeviceoptions.output": "Ausgang: %s",
   "sounddeviceoptions.newdevice": "Wähle ein neues Ausgabegerät",
-  "sounddeviceoptions.activedevice": "Gerade aktiv: %s"
+  "sounddeviceoptions.activedevice": "Gerade aktiv: %s",
+  "sounddeviceoptions.readFailed": "Konnte die Ausgabegeräte nicht auslesen!",
+  "sounddeviceoptions.readFailedHint": "Dein Sound-Treiber unterstützt diese Option möglicherweise nicht."
 }

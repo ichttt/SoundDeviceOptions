@@ -10,15 +10,15 @@ authors="ichttt"
     version="${file.jarVersion}"
     displayName="Sound Device Options"
     description="Sound Device Options allows you to change the sound device while the game is running"
-[[dependencies.sounddeviceoptions]]
-    modId="forge"
-    mandatory=true
-    versionRange="[26.0.32,)"
-    ordering="NONE"
-    side="BOTH"
+#[[dependencies.sounddeviceoptions]]
+#    modId="forge"
+#    mandatory=true
+#    versionRange="[28.0.0,)"
+#    ordering="NONE"
+#    side="BOTH"
 [[dependencies.sounddeviceoptions]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.2,1.15)"
+    versionRange="[1.14.4,1.15)"
     ordering="NONE"
     side="BOTH"

@@ -29,6 +29,7 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiSound extends OptionsSoundsScreen {
     public GuiSound(Screen parentIn, GameSettings settingsIn) {
@@ -47,7 +48,7 @@ public class GuiSound extends OptionsSoundsScreen {
         addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, minecraft.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200), b -> {
             SoundDevices.reloadDeviceList();
             if (SoundDevices.validDevices.isEmpty()) {
-                minecraft.displayGuiScreen(new ErrorScreen(new StringTextComponent("Failed to read sound devices"), "Your audio driver might not support this feature."));
+                minecraft.displayGuiScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), I18n.format("sounddeviceoptions.readFailedHint")));
             } else {
                 minecraft.displayGuiScreen(new GuiChooseOutput(GuiSound.this));
             }

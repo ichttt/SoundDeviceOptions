@@ -87,12 +87,15 @@ public class GuiChooseOutput extends Screen {
             this.addEntry(defaultOption);
             this.setSelected(defaultOption);
             index++;
+            this.selectedIndex = current == null ? 0 : (devices.indexOf(current) + 1);
             for (String s : devices) {
-                this.addEntry(new Entry(s, index));
+                Entry entry = new Entry(s, index);
+                this.addEntry(entry);
+                if (index == selectedIndex)
+                    setSelected(entry);
                 index++;
             }
             this.devices = devices;
-            this.selectedIndex = current == null ? 0 : (devices.indexOf(current) + 1);
         }
 
         @Override
