@@ -28,14 +28,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(SoundDeviceOptions.MODID)
-@Mod.EventBusSubscriber(modid = SoundDeviceOptions.MODID)
 public class SoundDeviceOptions {
     public static final String MODID = "sounddeviceoptions";
     public static final String NAME = "Sound Device Options";
-    public static final String FINGERPRINT = "7904c4e13947c8a616c5f39b26bdeba796500722";
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public SoundDeviceOptions() {
+        //noinspection Convert2MethodRef - this is to avoid classloading
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientHooks.register());
         DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.debug("Running on dedicated server - Not doing anything"));
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, SDOConfig.clientSpec);

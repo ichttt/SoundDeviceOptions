@@ -18,11 +18,8 @@
 
 package ichttt.mods.sounddeviceoptions.client;
 
-import com.electronwill.nightconfig.core.Config;
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALC11;
 import org.lwjgl.openal.ALUtil;
@@ -54,6 +51,10 @@ public class SoundDevices {
         if (ALC10.alcIsExtensionPresent(0, "ALC_enumerate_all_EXT")) {
             SoundDeviceOptions.LOGGER.info("Reading sound devices");
             List<String> devices = ALUtil.getStringList(0, ALC11.ALC_ALL_DEVICES_SPECIFIER);
+            if (devices == null) {
+                SoundDeviceOptions.LOGGER.error("Got null from devices list!");
+                return;
+            }
             for (String deviceName : devices) {
                 String error = null;
                 long device = ALC10.alcOpenDevice(deviceName);

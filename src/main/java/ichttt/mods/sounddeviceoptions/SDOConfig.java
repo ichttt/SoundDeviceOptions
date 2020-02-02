@@ -26,8 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class SDOConfig {
-
-    public static final ForgeConfigSpec clientSpec;
+    static final ForgeConfigSpec clientSpec;
     public static final SDOConfig CLIENT;
 
     static {

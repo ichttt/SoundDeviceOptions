@@ -24,6 +24,7 @@ import org.lwjgl.openal.ALC10;
 
 import java.nio.ByteBuffer;
 
+@SuppressWarnings("unused")
 public class ASMHooks {
 
     //Accept a ByteBuffer as an arg, so the signature matches
