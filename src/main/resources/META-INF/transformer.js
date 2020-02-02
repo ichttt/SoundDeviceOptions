@@ -1,6 +1,6 @@
 function initializeCoreMod() {
     return {
-        'coreModName': {
+        'SoundSystem Transformer': {
             'target': {
                 'type': 'CLASS',
                 'name': 'net.minecraft.client.audio.SoundSystem'
@@ -19,7 +19,7 @@ function initializeCoreMod() {
                     if (!deobfNameEquals) {
                         continue;
                     }
-                    print("Found method init()V, patching...");
+                    ASMAPI.log("INFO", "Found method init()V, patching...");
 
                     var Opcodes = Java.type('org.objectweb.asm.Opcodes');
                     var arrayLength = method.instructions.size();
@@ -28,7 +28,7 @@ function initializeCoreMod() {
                         if (instruction.getOpcode() === Opcodes.INVOKESTATIC && instruction.owner === "org/lwjgl/openal/ALC10" && instruction.name === "alcOpenDevice") {
                             method.instructions.insertBefore(instruction, ASMAPI.buildMethodCall("ichttt/mods/sounddeviceoptions/client/ASMHooks", "setupSound", "(Ljava/nio/ByteBuffer;)J", ASMAPI.MethodType.STATIC))
                             method.instructions.remove(instruction);
-                            print("Patched!");
+                            ASMAPI.log("DEBUG", "Patched!");
                             success = true;
                             break;
                         }
@@ -36,6 +36,7 @@ function initializeCoreMod() {
                     break;
                 }
                 if (success === false) {
+                    ASMAPI.log("ERROR", "Failed to transform!");
                     throw "Failed to transform!"
                 }
 

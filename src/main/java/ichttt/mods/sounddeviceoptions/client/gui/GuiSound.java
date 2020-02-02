@@ -46,7 +46,7 @@ public class GuiSound extends OptionsSoundsScreen {
         }
         addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, minecraft.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200), b -> {
             SoundDevices.reloadDeviceList();
-            if (SoundDevices.validDevices.isEmpty()) {
+            if (SoundDevices.VALID_DEVICES.isEmpty()) {
                 minecraft.displayGuiScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), I18n.format("sounddeviceoptions.readFailedHint")));
             } else {
                 minecraft.displayGuiScreen(new GuiChooseOutput(GuiSound.this));
@@ -54,7 +54,7 @@ public class GuiSound extends OptionsSoundsScreen {
         }));
         addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, I18n.format("gui.done"), button -> {
             GuiSound.this.minecraft.gameSettings.saveOptions(); //Same as GuiScreenOptionsSound this
-            GuiSound.this.minecraft.displayGuiScreen(GuiSound.this.parent);
+            GuiSound.this.minecraft.displayGuiScreen(GuiSound.this.parentScreen);
         }));
     }
 }

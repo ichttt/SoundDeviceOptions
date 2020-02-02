@@ -43,7 +43,7 @@ public class GuiChooseOutput extends Screen {
 
     @Override
     public void init() {
-        this.list = new DeviceList(SoundDevices.validDevices, SDOConfig.getActiveSoundDevice());
+        this.list = new DeviceList(SoundDevices.VALID_DEVICES, SDOConfig.getActiveSoundDevice());
         this.list.setLeftPos(5);
         this.children.add(this.list);
         this.startIndex = this.list.selectedIndex;

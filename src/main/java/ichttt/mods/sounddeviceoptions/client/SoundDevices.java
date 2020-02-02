@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundDevices {
-    public static final List<String> validDevices = new ArrayList<>();
+    public static final List<String> VALID_DEVICES = new ArrayList<>();
 
     public static void reloadDeviceList() {
-        synchronized (validDevices) {
+        synchronized (VALID_DEVICES) {
             boolean success = false;
             try {
                 reloadDeviceList0();
@@ -42,14 +42,14 @@ public class SoundDevices {
                 SoundDeviceOptions.LOGGER.error("Failed to reload device list! Unexpected error!", e);
             }
             if (!success)
-                validDevices.clear();
+                VALID_DEVICES.clear();
         }
     }
 
     private static void reloadDeviceList0() {
-        validDevices.clear();
+        VALID_DEVICES.clear();
         if (ALC10.alcIsExtensionPresent(0, "ALC_enumerate_all_EXT")) {
-            SoundDeviceOptions.LOGGER.info("Reading sound devices");
+            SoundDeviceOptions.LOGGER.debug("Reading sound devices");
             List<String> devices = ALUtil.getStringList(0, ALC11.ALC_ALL_DEVICES_SPECIFIER);
             if (devices == null) {
                 SoundDeviceOptions.LOGGER.error("Got null from devices list!");
@@ -74,7 +74,7 @@ public class SoundDevices {
                     SoundDeviceOptions.LOGGER.error("Error code: " + error);
                 } else {
                     SoundDeviceOptions.LOGGER.debug("Found valid device " + deviceName);
-                    validDevices.add(deviceName);
+                    VALID_DEVICES.add(deviceName);
                 }
             }
         } else {
@@ -83,7 +83,7 @@ public class SoundDevices {
     }
 
     public static boolean validateActiveOutput(String output) {
-        return output == null || validDevices.contains(output);
+        return output == null || VALID_DEVICES.contains(output);
     }
 
     public static void updateOutput(String newValue) {
