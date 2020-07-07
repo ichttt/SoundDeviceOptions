@@ -44,15 +44,15 @@ public class GuiSound extends OptionsSoundsScreen {
         if (fromBList != fromCList) {
             throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " msg " + fromBList.getMessage() + " from children list= " + fromCList);
         }
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, minecraft.fontRenderer.trimStringToWidth(I18n.format("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), 200), b -> {
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, new TranslationTextComponent("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), b -> {
             SoundDevices.reloadDeviceList();
             if (SoundDevices.VALID_DEVICES.isEmpty()) {
-                minecraft.displayGuiScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), I18n.format("sounddeviceoptions.readFailedHint")));
+                minecraft.displayGuiScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), new TranslationTextComponent("sounddeviceoptions.readFailedHint")));
             } else {
                 minecraft.displayGuiScreen(new GuiChooseOutput(GuiSound.this));
             }
         }));
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, I18n.format("gui.done"), button -> {
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, new TranslationTextComponent("gui.done"), button -> {
             GuiSound.this.minecraft.gameSettings.saveOptions(); //Same as GuiScreenOptionsSound this
             GuiSound.this.minecraft.displayGuiScreen(GuiSound.this.parentScreen);
         }));
