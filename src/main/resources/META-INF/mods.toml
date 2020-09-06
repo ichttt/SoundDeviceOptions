@@ -3,6 +3,7 @@ modLoader="javafml"
 loaderVersion="[26,)"
 issueTrackerURL="https://github.com/ichttt/sounddeviceoptions/issues"
 displayURL="https://minecraft.curseforge.com/projects/more-sound-config"
+license="GPL v3"
 # logoFile="firstaid_logo.png"
 authors="ichttt"
 [[mods]]

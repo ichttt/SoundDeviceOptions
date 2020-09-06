@@ -40,7 +40,7 @@ public class ClientHooks {
     private static void onGuiOpen(GuiOpenEvent event) {
         if (event.getGui() instanceof OptionsSoundsScreen && !(event.getGui() instanceof GuiSound)) {
             OptionsSoundsScreen sounds = (OptionsSoundsScreen) event.getGui();
-            event.setGui(new GuiSound(sounds.parentScreen, sounds.gameSettings));
+            event.setGui(new GuiSound(sounds.lastScreen, sounds.options));
         }
     }
 }

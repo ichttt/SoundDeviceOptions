@@ -58,7 +58,7 @@ public class SDOConfig {
 
     public static String formatDevice(String device) {
         if (device == null)
-            return I18n.format("sounddeviceoptions.default");
+            return I18n.get("sounddeviceoptions.default");
         else if (device.startsWith("OpenAL Soft on "))
             return device.substring("OpenAL Soft on ".length());
         return device;

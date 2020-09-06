@@ -48,7 +48,7 @@ public class GuiChooseOutput extends Screen {
         this.list.setLeftPos(5);
         this.children.add(this.list);
         this.startIndex = this.list.selectedIndex;
-        addButton(new Button(width / 2 - 100, height - 30, 200, 20, new TranslationTextComponent("gui.done"), button -> GuiChooseOutput.this.minecraft.displayGuiScreen(GuiChooseOutput.this.parent)));
+        addButton(new Button(width / 2 - 100, height - 30, 200, 20, new TranslationTextComponent("gui.done"), button -> GuiChooseOutput.this.minecraft.setScreen(GuiChooseOutput.this.parent)));
         super.init();
     }
 
@@ -56,8 +56,8 @@ public class GuiChooseOutput extends Screen {
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderDirtBackground(0);
         this.list.render(stack, mouseX, mouseY, partialTicks);
-        this.drawCenteredString(stack, minecraft.fontRenderer, new TranslationTextComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
-        this.drawCenteredString(stack, minecraft.fontRenderer, new TranslationTextComponent("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
+        this.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        this.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.render(stack, mouseX, mouseY, partialTicks);
     }
 
@@ -68,7 +68,7 @@ public class GuiChooseOutput extends Screen {
             if (SoundDevices.validateActiveOutput(newValue)) {
                 SoundDevices.updateOutput(newValue);
             }
-            minecraft.getSoundHandler().sndManager.reload();
+            minecraft.getSoundManager().soundEngine.reload();
         }
         super.removed();
     }
@@ -84,7 +84,7 @@ public class GuiChooseOutput extends Screen {
                     30, GuiChooseOutput.this.height-50,
                     12);
             int index = 0;
-            Entry defaultOption = new Entry("<" + I18n.format("sounddeviceoptions.default") + ">", index);
+            Entry defaultOption = new Entry("<" + I18n.get("sounddeviceoptions.default") + ">", index);
             this.addEntry(defaultOption);
             this.setSelected(defaultOption);
             index++;
@@ -120,7 +120,7 @@ public class GuiChooseOutput extends Screen {
 
             @Override
             public void render(MatrixStack stack, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
-                GuiChooseOutput.this.minecraft.fontRenderer.drawString(stack, device, left + 1, top, 0xFFFFFF);
+                GuiChooseOutput.this.minecraft.font.draw(stack, device, left + 1, top, 0xFFFFFF);
             }
 
             @Override
