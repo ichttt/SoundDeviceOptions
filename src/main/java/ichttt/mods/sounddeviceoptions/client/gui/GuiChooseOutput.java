@@ -78,11 +78,7 @@ public class GuiChooseOutput extends Screen {
         int selectedIndex;
 
         public DeviceList(List<String> devices, String current) {
-            super(GuiChooseOutput.this.minecraft,
-                    GuiChooseOutput.this.width-10,
-                    GuiChooseOutput.this.height - 30,
-                    30, GuiChooseOutput.this.height-50,
-                    12);
+            super(GuiChooseOutput.this.minecraft, GuiChooseOutput.this.width - 10, GuiChooseOutput.this.height - 30, 30, GuiChooseOutput.this.height - 50, 12);
             int index = 0;
             Entry defaultOption = new Entry("<" + I18n.get("sounddeviceoptions.default") + ">", index);
             this.addEntry(defaultOption);
@@ -92,8 +88,7 @@ public class GuiChooseOutput extends Screen {
             for (String s : devices) {
                 Entry entry = new Entry(s, index);
                 this.addEntry(entry);
-                if (index == selectedIndex)
-                    setSelected(entry);
+                if (index == selectedIndex) setSelected(entry);
                 index++;
             }
             this.devices = devices;
@@ -124,8 +119,7 @@ public class GuiChooseOutput extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_)
-            {
+            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
                 DeviceList.this.selectedIndex = this.index;
                 DeviceList.this.setSelected(this);
                 return true;

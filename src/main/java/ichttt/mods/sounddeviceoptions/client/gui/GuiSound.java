@@ -44,17 +44,23 @@ public class GuiSound extends OptionsSoundsScreen {
         if (fromBList != fromCList) {
             throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " msg " + fromBList.getMessage() + " from children list= " + fromCList);
         }
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, new TranslationTextComponent("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), b -> {
-            SoundDevices.reloadDeviceList();
-            if (SoundDevices.VALID_DEVICES.isEmpty()) {
-                minecraft.setScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), new TranslationTextComponent("sounddeviceoptions.readFailedHint")));
-            } else {
-                minecraft.setScreen(new GuiChooseOutput(GuiSound.this));
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, new TranslationTextComponent("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), new Button.IPressable() {
+            @Override
+            public void onPress(Button b) {
+                SoundDevices.reloadDeviceList();
+                if (SoundDevices.VALID_DEVICES.isEmpty()) {
+                    minecraft.setScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), new TranslationTextComponent("sounddeviceoptions.readFailedHint")));
+                } else {
+                    minecraft.setScreen(new GuiChooseOutput(GuiSound.this));
+                }
             }
         }));
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, new TranslationTextComponent("gui.done"), button -> {
-            GuiSound.this.minecraft.options.save(); //Same as GuiScreenOptionsSound this
-            GuiSound.this.minecraft.setScreen(GuiSound.this.lastScreen);
+        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, new TranslationTextComponent("gui.done"), new Button.IPressable() {
+            @Override
+            public void onPress(Button button) {
+                GuiSound.this.minecraft.options.save(); //Same as GuiScreenOptionsSound this
+                GuiSound.this.minecraft.setScreen(GuiSound.this.lastScreen);
+            }
         }));
     }
 }

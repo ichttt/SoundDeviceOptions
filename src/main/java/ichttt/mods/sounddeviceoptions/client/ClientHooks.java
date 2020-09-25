@@ -19,10 +19,13 @@
 package ichttt.mods.sounddeviceoptions.client;
 
 import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
+import ichttt.mods.sounddeviceoptions.client.gui.GuiChooseOutput;
 import ichttt.mods.sounddeviceoptions.client.gui.GuiSound;
 import net.minecraft.client.gui.screen.OptionsSoundsScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -31,6 +34,7 @@ public class ClientHooks {
     public static void register() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHooks::setup);
         MinecraftForge.EVENT_BUS.addListener(ClientHooks::onGuiOpen);
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (minecraft, screen) -> new GuiChooseOutput(screen));
     }
 
     private static void setup(FMLCommonSetupEvent event) {
