@@ -1,0 +1,8 @@
+{
+  "sounddeviceoptions.default": "Система по умолчанию",
+  "sounddeviceoptions.output": "Выход: %s",
+  "sounddeviceoptions.newdevice": "Выберите новый выход устройства",
+  "sounddeviceoptions.activedevice": "На данный момент активно: %s",
+  "sounddeviceoptions.readFailed": "Ошибка чтения звука устройств!",
+  "sounddeviceoptions.readFailedHint": "Ваш звуковой драйвер может не поддерживать эту функцию."
+}
