@@ -20,18 +20,18 @@ package ichttt.mods.sounddeviceoptions.client.gui;
 
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.client.SoundDevices;
-import net.minecraft.client.GameSettings;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.ErrorScreen;
-import net.minecraft.client.gui.screen.OptionsSoundsScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.ErrorScreen;
+import net.minecraft.client.gui.screens.SoundOptionsScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class GuiSound extends OptionsSoundsScreen {
-    public GuiSound(Screen parentIn, GameSettings settingsIn) {
+public class GuiSound extends SoundOptionsScreen {
+    public GuiSound(Screen parentIn, Options settingsIn) {
         super(parentIn, settingsIn);
     }
 
@@ -39,23 +39,23 @@ public class GuiSound extends OptionsSoundsScreen {
     public void init() {
         super.init();
 //        SoundDevices.reloadDeviceList();
-        Widget fromBList = this.buttons.remove(this.buttons.size() - 1);
-        IGuiEventListener fromCList = this.children.remove(this.children.size() - 1);
-        if (fromBList != fromCList) {
-            throw new RuntimeException("Removed wrong button? From button list= " + fromBList + " msg " + fromBList.getMessage() + " from children list= " + fromCList);
+        GuiEventListener fromCList = this.children().get(this.children().size() - 1);
+        if (!(fromCList instanceof Button)) {
+            throw new RuntimeException("Uh oh, about to remove wrong thing! " + fromCList);
         }
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, new TranslationTextComponent("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), new Button.IPressable() {
+        this.removeWidget(fromCList);
+        addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 156, 200, 20, new TranslatableComponent("sounddeviceoptions.output", SDOConfig.friendlyActiveSoundDevice()), new Button.OnPress() {
             @Override
             public void onPress(Button b) {
                 SoundDevices.reloadDeviceList();
                 if (SoundDevices.VALID_DEVICES.isEmpty()) {
-                    minecraft.setScreen(new ErrorScreen(new TranslationTextComponent("sounddeviceoptions.readFailed"), new TranslationTextComponent("sounddeviceoptions.readFailedHint")));
+                    minecraft.setScreen(new ErrorScreen(new TranslatableComponent("sounddeviceoptions.readFailed"), new TranslatableComponent("sounddeviceoptions.readFailedHint")));
                 } else {
                     minecraft.setScreen(new GuiChooseOutput(GuiSound.this));
                 }
             }
         }));
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, new TranslationTextComponent("gui.done"), new Button.IPressable() {
+        addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 180, 200, 20, new TranslatableComponent("gui.done"), new Button.OnPress() {
             @Override
             public void onPress(Button button) {
                 GuiSound.this.minecraft.options.save(); //Same as GuiScreenOptionsSound this

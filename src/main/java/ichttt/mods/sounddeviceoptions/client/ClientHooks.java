@@ -21,20 +21,20 @@ package ichttt.mods.sounddeviceoptions.client;
 import ichttt.mods.sounddeviceoptions.SoundDeviceOptions;
 import ichttt.mods.sounddeviceoptions.client.gui.GuiChooseOutput;
 import ichttt.mods.sounddeviceoptions.client.gui.GuiSound;
-import net.minecraft.client.gui.screen.OptionsSoundsScreen;
+import net.minecraft.client.gui.screens.SoundOptionsScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmlclient.ConfigGuiHandler;
 
 public class ClientHooks {
 
     public static void register() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHooks::setup);
         MinecraftForge.EVENT_BUS.addListener(ClientHooks::onGuiOpen);
-        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (minecraft, screen) -> new GuiChooseOutput(screen));
+        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((minecraft, screen) -> new GuiChooseOutput(screen)));
     }
 
     private static void setup(FMLCommonSetupEvent event) {
@@ -42,8 +42,8 @@ public class ClientHooks {
     }
 
     private static void onGuiOpen(GuiOpenEvent event) {
-        if (event.getGui() instanceof OptionsSoundsScreen && !(event.getGui() instanceof GuiSound)) {
-            OptionsSoundsScreen sounds = (OptionsSoundsScreen) event.getGui();
+        if (event.getGui() instanceof SoundOptionsScreen && !(event.getGui() instanceof GuiSound)) {
+            SoundOptionsScreen sounds = (SoundOptionsScreen) event.getGui();
             event.setGui(new GuiSound(sounds.lastScreen, sounds.options));
         }
     }

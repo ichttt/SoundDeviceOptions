@@ -1,10 +1,10 @@
 function initializeCoreMod() {
     return {
-        'coreModName': {
+        'SDO SoundLibraryTranformer': {
             'target': {
                 'type': 'METHOD',
-                'class': 'net.minecraft.client.audio.SoundSystem',
-                'methodName': 'func_216406_f',
+                'class': 'com.mojang.blaze3d.audio.Library',
+                'methodName': 'm_83704_',
                 'methodDesc': '()J'
             },
             'transformer': function(method) {

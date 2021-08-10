@@ -18,16 +18,18 @@
 
 package ichttt.mods.sounddeviceoptions.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.client.SoundDevices;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.list.ExtendedList;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class GuiChooseOutput extends Screen {
     private int startIndex;
 
     public GuiChooseOutput(Screen parent) {
-        super(new TranslationTextComponent("sounddeviceoptions.chooseoutput"));
+        super(new TranslatableComponent("sounddeviceoptions.chooseoutput"));
         this.parent = parent;
         this.initalDevice = SDOConfig.friendlyActiveSoundDevice();
     }
@@ -47,18 +49,18 @@ public class GuiChooseOutput extends Screen {
     public void init() {
         this.list = new DeviceList(SoundDevices.VALID_DEVICES, SDOConfig.getActiveSoundDevice());
         this.list.setLeftPos(5);
-        this.children.add(this.list);
+        this.addWidget(this.list);
         this.startIndex = this.list.selectedIndex;
-        addButton(new Button(width / 2 - 100, height - 30, 200, 20, new TranslationTextComponent("gui.done"), button -> GuiChooseOutput.this.minecraft.setScreen(GuiChooseOutput.this.parent)));
+        this.addRenderableWidget(new Button(width / 2 - 100, height - 30, 200, 20, new TranslatableComponent("gui.done"), button -> GuiChooseOutput.this.minecraft.setScreen(GuiChooseOutput.this.parent)));
         super.init();
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderDirtBackground(0);
         this.list.render(stack, mouseX, mouseY, partialTicks);
-        AbstractGui.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
-        AbstractGui.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
+        GuiComponent.drawCenteredString(stack, minecraft.font, new TranslatableComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        GuiComponent.drawCenteredString(stack, minecraft.font, new TranslatableComponent("sounddeviceoptions.activedevice", ChatFormatting.UNDERLINE + this.initalDevice + ChatFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.render(stack, mouseX, mouseY, partialTicks);
     }
 
@@ -74,7 +76,7 @@ public class GuiChooseOutput extends Screen {
         super.removed();
     }
 
-    private class DeviceList extends ExtendedList<DeviceList.Entry> {
+    private class DeviceList extends ObjectSelectionList<DeviceList.Entry> {
         private final List<String> devices;
         int selectedIndex;
 
@@ -105,7 +107,7 @@ public class GuiChooseOutput extends Screen {
             return width;
         }
 
-        private class Entry extends ExtendedList.AbstractListEntry<Entry> {
+        private class Entry extends ObjectSelectionList.Entry<Entry> {
             private final String device;
             private final int index;
 
@@ -115,7 +117,7 @@ public class GuiChooseOutput extends Screen {
             }
 
             @Override
-            public void render(MatrixStack stack, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
+            public void render(PoseStack stack, int entryIdx, int top, int left, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean p_194999_5_, float partialTicks) {
                 GuiChooseOutput.this.minecraft.font.draw(stack, device, left + 1, top, 0xFFFFFF);
             }
 
@@ -127,6 +129,10 @@ public class GuiChooseOutput extends Screen {
             }
 
 
+            @Override
+            public Component getNarration() {
+                return TextComponent.EMPTY; //TODO
+            }
         }
     }
 }
