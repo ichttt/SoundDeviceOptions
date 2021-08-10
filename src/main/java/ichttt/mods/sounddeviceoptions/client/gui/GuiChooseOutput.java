@@ -21,6 +21,7 @@ package ichttt.mods.sounddeviceoptions.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import ichttt.mods.sounddeviceoptions.SDOConfig;
 import ichttt.mods.sounddeviceoptions.client.SoundDevices;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
@@ -56,8 +57,8 @@ public class GuiChooseOutput extends Screen {
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderDirtBackground(0);
         this.list.render(stack, mouseX, mouseY, partialTicks);
-        this.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
-        this.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
+        AbstractGui.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.newdevice"), this.width / 2, 6, 0xFFFFFF);
+        AbstractGui.drawCenteredString(stack, minecraft.font, new TranslationTextComponent("sounddeviceoptions.activedevice", TextFormatting.UNDERLINE + this.initalDevice + TextFormatting.RESET), this.width / 2, 18, 0xFFFFFF);
         super.render(stack, mouseX, mouseY, partialTicks);
     }
 

@@ -25,6 +25,8 @@ import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,8 +38,11 @@ public class SoundDeviceOptions {
 
     public SoundDeviceOptions() {
         //noinspection Convert2MethodRef - this is to avoid classloading
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientHooks.register());
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.debug("Running on dedicated server - Not doing anything"));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.register());
+        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> LOGGER.debug("Running on dedicated server - Not doing anything"));
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, SDOConfig.clientSpec);
+
+        //Make sure the mod being absent on the other network side does not cause the client to display the server as incompatible
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 }
